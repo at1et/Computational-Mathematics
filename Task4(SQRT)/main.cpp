@@ -19,7 +19,7 @@ int main() {
     double L[n][n] = {0};
     double U[n][n] = {0};
 
-    // === Этап №1 ===
+    // 1 этап
 
     // Заполнение матрицы L
     L[0][0] = sqrt(A[0][0]);
@@ -68,7 +68,7 @@ int main() {
         cout << endl;
     }
 
-    // === Этап №2 ===
+    // 2 этап
 
     // Вычисление Y
     double Y[n];
@@ -87,7 +87,7 @@ int main() {
         cout << Y[i] << " ";
     cout << endl;
 
-    // === Этап №3 ===
+    // 3 этап
 
     // Вычисление X
     double X[n];
@@ -105,6 +105,4 @@ int main() {
     for (int i = 0; i < n; i++)
         cout << X[i] << " ";
     cout << endl;
-
-    return 0;
 }
