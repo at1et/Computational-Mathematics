@@ -1,60 +1,44 @@
 #include <iostream>
-#include <vector>
 #include <cmath>
 
 using namespace std;
 
+const int n = 5;  // Размерность матрицы и вектора
+
 int main() {
-    int n = 4;
+    // Заданные матрица A и вектор B
+    double A[n][n] = {{9, 7, 3, 6, 1},
+                      {7, 9, 3, 7, 3},
+                      {3, 3, 8, 4, 2},
+                      {6, 7, 4, 9, 3},
+                      {1, 3, 2, 3, 2}};
 
-    // Матрица системы уравнений
-    vector<vector<double>> A = {
-        {9, 7, 3, 6},
-        {7, 9, 3, 7},
-        {3, 3, 8, 4},
-        {6, 7, 4, 9}
-    };
+    double B[n] = {45, 51, 43, 53, 21};
 
-    // Вектор свободных коэффициентов
-    vector<double> B = { 45, 51, 43, 53 };
+    // Инициализация матриц L и U
+    double L[n][n] = {0};
+    double U[n][n] = {0};
 
-    // Матрицы L и U для разложения
-    vector<vector<double>> L(n, vector<double>(n, 0));
-    vector<vector<double>> U(n, vector<double>(n, 0));
-
-    // Векторы для хранения промежуточных результатов и решения
-    vector<double> Y(n, 0);
-    vector<double> X(n, 0);
-
-    // Заполнение матрицы A и вектора B
-    for (int i = 0; i < n; i++) {
-        for (int j = 0; j < n; j++) {
-            A[i][j] = sqrt(A[i][j]); // Вычисление корней квадратных корней для элементов матрицы A
-        }
-        B[i] = sqrt(B[i]); // Вычисление корней для элементов вектора B
-    }
+    // === Этап №1 ===
 
     // Заполнение матрицы L
-    L[0][0] = A[0][0]; // Заполнение первого элемента матрицы L
+    L[0][0] = sqrt(A[0][0]);
 
-    for (int i = 1; i < n; i++) {
-        L[i][0] = A[i][0] / L[0][0]; // Вычисление элементов первого столбца матрицы L
-    }
+    for (int i = 1; i < n; i++)
+        L[i][0] = A[i][0] / L[0][0];
 
     for (int k = 1; k < n; k++) {
-        double sqSum = 0; // Переменная для хранения суммы квадратов
-        for (int m = 0; m < k; m++) {
-            sqSum += L[k][m] * L[k][m]; // Суммирование квадратов элементов
-        }
-        L[k][k] = sqrt(A[k][k] - sqSum); // Вычисление диагонального элемента матрицы L
+        double sqSum = 0;
+        for (int m = 0; m < k; m++)
+            sqSum += L[k][m] * L[k][m];
+        L[k][k] = sqrt(A[k][k] - sqSum);
 
         if (k < n - 1) {
             for (int i = k + 1; i < n; i++) {
-                double pairSum = 0; // Переменная для хранения суммы произведений
-                for (int m = 0; m < k; m++) {
-                    pairSum += L[i][m] * L[k][m]; // Суммирование произведений элементов
-                }
-                L[i][k] = (A[i][k] - pairSum) / L[k][k]; // Вычисление элементов матрицы L
+                double pairSum = 0;
+                for (int m = 0; m < k; m++)
+                    pairSum += L[i][m] * L[k][m];
+                L[i][k] = (A[i][k] - pairSum) / L[k][k];
             }
         }
     }
@@ -62,12 +46,12 @@ int main() {
     // Заполнение матрицы U
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < n; j++) {
-            U[i][j] = L[j][i]; // Заполнение матрицы U транспонированными элементами матрицы L
+            U[i][j] = L[j][i];
         }
     }
 
     // Вывод матрицы L
-    cout << "Матрица L:" << endl;
+    cout << "Matrix L:\n";
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < n; j++) {
             cout << L[i][j] << " ";
@@ -76,7 +60,7 @@ int main() {
     }
 
     // Вывод матрицы U
-    cout << "Матрица U:" << endl;
+    cout << "Matrix U:\n";
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < n; j++) {
             cout << U[i][j] << " ";
@@ -84,32 +68,43 @@ int main() {
         cout << endl;
     }
 
-    // Вычисление вектора Y
-    Y[0] = B[0] / L[0][0]; // Первый элемент вектора Y
+    // === Этап №2 ===
+
+    // Вычисление Y
+    double Y[n];
+    Y[0] = B[0] / L[0][0];
 
     for (int i = 1; i < n; i++) {
-        Y[i] = B[i]; // Значения вектора B
-        for (int m = 0; m < i; m++) {
-            Y[i] -= L[i][m] * Y[m]; // Вычисление элементов вектора Y
-        }
-        Y[i] /= L[i][i]; // Деление элемента вектора Y
+        Y[i] = B[i];
+        for (int m = 0; m < i; m++)
+            Y[i] -= L[i][m] * Y[m];
+        Y[i] /= L[i][i];
     }
 
     // Вывод вектора Y
-    cout << "Вектор Y:" << endl;
-    for (int i = 0; i < n; i++) {
+    cout << "Vector Y:\n";
+    for (int i = 0; i < n; i++)
         cout << Y[i] << " ";
-    }
     cout << endl;
 
-    // Вычисление вектора X
-    X[n - 1] = Y[n - 1] / U[n - 1][n - 1]; // Последний элемент вектора X
+    // === Этап №3 ===
+
+    // Вычисление X
+    double X[n];
+    X[n - 1] = Y[n - 1] / U[n - 1][n - 1];
 
     for (int i = n - 2; i >= 0; i--) {
-        X[i] = Y[i]; // Перенос значений из вектора Y в вектор X
-        for (int m = i + 1; m < n; m++) {
-            X[i] -= U[i][m] * X[m]; // Вычисление элементов вектора X
-        }
-        X[i] /= U[i][i]; // Деление элемента вект
+        X[i] = Y[i];
+        for (int m = i + 1; m < n; m++)
+            X[i] -= U[i][m] * X[m];
+        X[i] /= U[i][i];
     }
+
+    // Вывод вектора X
+    cout << "Solution X:\n";
+    for (int i = 0; i < n; i++)
+        cout << X[i] << " ";
+    cout << endl;
+
+    return 0;
 }
