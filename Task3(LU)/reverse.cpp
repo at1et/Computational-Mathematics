@@ -18,14 +18,12 @@ int main() {
 
     // Определение массивов
     vector<vector<double>> A = {
-        {9, 7, 3, 6, 1},
-        {7, 9, 3, 7, 3},
-        {3, 3, 8, 4, 2},
-        {6, 7, 4, 9, 3},
-        {1, 3, 2, 3, 2}
+        {3, 8, 2, 2, 8},
+        {4, 5, 9, 9, 9},
+        {2, 9, 8, 9, 6},
+        {4, 3, 7, 4, 3},
+        {3, 1, 9, 8, 4}
     };
-
-    vector<double> B = {45, 51, 43, 53, 21};
 
     vector<vector<double>> L(n, vector<double>(n, 0));
     vector<vector<double>> U(n, vector<double>(n, 0));
