@@ -85,7 +85,7 @@ int main() {
     }
 
     // Вывод матрицы, обратной к A
-    cout << "Inverse of matrix A:\n";
+    cout << "Matrix A:\n";
     printMatrix(AInv);
 
     return 0;
