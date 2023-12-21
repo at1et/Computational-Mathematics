@@ -2,8 +2,8 @@
 #include <cmath>
 
 int main() {
-    setlocale(LC_ALL, Russian)
-    const int n = 5;
+    setlocale(LC_ALL, "Russian");
+        const int n = 5;
     double A[n][n] = { {3, 8, 2, 2, 8},
                       {4, 5, 9, 9, 9},
                       {2, 9, 8, 9, 6},
